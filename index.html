@@ -6,8 +6,30 @@
     <link rel="stylesheet" href="style.css" />
     <title>Cudio</title>
   </head>
-  <body>
-    Cudio
+  <body class="inter-400">
+    <nav>
+      <div class="logo">
+        <img src="logo.jpeg" alt="" />
+        <span class="ojuju-400">Cudio</span>
+      </div>
+      <div>Home</div>
+      <div>About</div>
+      <div class="upload-section">
+        <input type="file" id="uploaded-songs" multiple />
+        <label for="uploaded-songs"
+          ><span>Songs</span><i class="fa-solid fa-file-arrow-up"></i
+        ></label>
+        <input type="file" id="uploaded-lyrics" multiple />
+        <label for="uploaded-lyrics"
+          ><span>Lyrics</span><i class="fa-solid fa-file-arrow-up"></i
+        ></label>
+        <button class="btn">Add Songs</button>
+      </div>
+    </nav>
   </body>
+  <script
+    src="https://kit.fontawesome.com/b873ec539c.js"
+    crossorigin="anonymous"
+  ></script>
   <script src="script.js"></script>
 </html>
