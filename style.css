@@ -136,6 +136,7 @@ label span {
 
 .lyrics {
   width: 59%;
+  padding-left: 4em;
 }
 
 .controls i {
@@ -168,4 +169,34 @@ input[type="range"]::-webkit-slider-thumb {
   height: 12px;
   width: 6px;
   margin-top: calc((var(--track-height) / 2) - 6px);
+}
+
+/* Songs list */
+
+.song-item {
+  height: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  justify-content: space-between;
+  background: white;
+  color: black;
+  align-items: center;
+  padding: 0.25em;
+  border-radius: 1em;
+  margin: 1em 0;
+}
+
+.song-item img {
+  height: 34px;
+  border-radius: 50%;
+}
+
+.song-item span i {
+  margin: 0 0.7em;
+  cursor: pointer;
+}
+
+.song-item-container {
+  margin-top: 3.5em;
 }
