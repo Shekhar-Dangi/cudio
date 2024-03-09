@@ -88,3 +88,84 @@ label span {
   background: #7bd87b;
   border-radius: 0.4em;
 }
+
+/* Main container */
+
+.container {
+  display: flex;
+  width: 80vw;
+}
+
+.song-player {
+  position: sticky;
+  background-color: black;
+  color: white;
+  height: 130px;
+  bottom: 0;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.controls i {
+  margin: 0.3em 0.2em;
+}
+
+.container {
+  background-color: black;
+  min-height: 68vh;
+  color: white;
+  display: flex;
+  justify-content: space-around;
+  margin: 1.7em auto;
+  width: 70%;
+  border-radius: 0.9em;
+  padding: 1.5em;
+}
+
+.available-songs {
+  width: 40%;
+}
+
+.songs-list,
+.lyrics-text {
+  margin-top: 3.5em;
+}
+
+.lyrics {
+  width: 59%;
+}
+
+.controls i {
+  cursor: pointer;
+}
+
+/* Seekbar */
+
+input[type="range"] {
+  position: relative;
+  scroll-behavior: smooth;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  --range-width: 30vw;
+  width: var(--range-width);
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: white;
+  --track-height: 0.4rem;
+  height: 0.4rem;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  background-color: grey;
+  height: 12px;
+  width: 6px;
+  margin-top: calc((var(--track-height) / 2) - 6px);
+}
