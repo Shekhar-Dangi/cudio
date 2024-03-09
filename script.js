@@ -6,6 +6,8 @@ const prev_song = document.getElementById("prevsong");
 const next_song = document.getElementById("nextsong");
 const progress_bar = document.getElementById("progressbar");
 const song_name_container = document.getElementById("songname");
+const duration = document.querySelector(".duration");
+const current_duration = document.querySelector(".current-duration");
 
 // Initials
 let audio_element = new Audio();
@@ -13,10 +15,12 @@ let is_playing = false;
 let songs_list = [];
 let lyrics_list = [];
 let song_index = 0;
-let lyrics_index = 0;
-const active_lyrics_lines = [];
+let lyrics_index = -1;
+let lyrics_lines_index = 0;
+let active_lyrics_lines = [];
 let is_time_update_attached = false;
 let is_dragging_progressBar = false;
+let lyrics_lines = [];
 
 const attachTimeUpdate = (action) => {
   if (!is_time_update_attached) {
@@ -25,10 +29,30 @@ const attachTimeUpdate = (action) => {
   }
 };
 
-const updateSeekBar = () => {
+const updateSeekBarAndLyrics = () => {
   if (!is_dragging_progressBar) {
     let progress = (audio_element.currentTime / audio_element.duration) * 100;
     progress_bar.value = progress;
+    current_duration.innerText = convertTime(audio_element.currentTime);
+
+    for (let i = 0; i < lyrics_lines.length; i++) {
+      if (
+        audio_element.currentTime > lyrics_lines[i].time &&
+        i + 1 < lyrics_lines.length &&
+        audio_element.currentTime < lyrics_lines[i + 1].time
+      ) {
+        lyrics_lines_index = i;
+        break;
+      }
+    }
+    const lyricsElement = document.getElementById(
+      "lyrics" + lyrics_lines_index
+    );
+    deactivateLyricsLine();
+    lyricsElement.classList.add("col-green");
+    if (!active_lyrics_lines.includes(lyrics_lines_index)) {
+      active_lyrics_lines.push(lyrics_lines_index);
+    }
   }
 };
 
@@ -44,6 +68,11 @@ const playNext = () => {
   audio_element = new Audio("songs/" + songs_list[song_index].name);
   progress_bar.value = 0;
   playPause();
+  deactivateLyricsLine();
+  processLyrics();
+  audio_element.addEventListener("loadedmetadata", function () {
+    duration.innerText = convertTime(audio_element.duration);
+  });
 };
 
 const playPrevious = () => {
@@ -58,11 +87,16 @@ const playPrevious = () => {
   audio_element = new Audio("songs/" + songs_list[song_index].name);
   progress_bar.value = 0;
   playPause();
+  deactivateLyricsLine();
+  processLyrics();
+  audio_element.addEventListener("loadedmetadata", function () {
+    duration.innerText = convertTime(audio_element.duration);
+  });
 };
 
 const playPause = () => {
   if (!is_time_update_attached) {
-    attachTimeUpdate(updateSeekBar);
+    attachTimeUpdate(updateSeekBarAndLyrics);
     audio_element.addEventListener("ended", () => {
       playNext();
     });
@@ -109,7 +143,7 @@ const addSongs = async () => {
   const songs = document.getElementById("uploaded-songs");
   songs_list = [...songs_list, ...songs.files];
   const lyrics = document.getElementById("uploaded-lyrics");
-  lyrics_list = [...lyrics_list, lyrics.files];
+  lyrics_list = [...lyrics_list, ...lyrics.files];
 
   if (songs_list.length > 0) {
     const parent = document.querySelector(".songs-list");
@@ -118,11 +152,108 @@ const addSongs = async () => {
     audio_element = new Audio("songs/" + songs_list[0].name);
 
     song_name_container.innerText = songs_list[0].name;
+    audio_element.addEventListener("loadedmetadata", function () {
+      duration.innerText = convertTime(audio_element.duration);
+    });
+    current_duration.innerText = "0:00";
   }
   for (let i = 0; i < songs_list.length; i++) {
     const song = songs_list[i];
     addSongToList(i, song.name);
   }
+  processLyrics();
+};
+
+// Lyrics Functions
+
+function convertTime(seconds) {
+  let minutes = Math.floor(seconds / 60);
+  let remaining_seconds = Math.floor(seconds % 60);
+  return `${minutes}:${remaining_seconds < 10 ? "0" : ""}${remaining_seconds}`;
+}
+
+const deactivateLyricsLine = () => {
+  active_lyrics_lines.forEach((i) => {
+    const lyrics_element = document.getElementById("lyrics" + i);
+    lyrics_element.classList.remove("col-green");
+  });
+  active_lyrics_lines = [];
+};
+
+const processLyrics = async () => {
+  findLyrics();
+  if (lyrics_index != -1) {
+    lyrics_lines = lyricsTextToObject(
+      await readLyrics(lyrics_list[lyrics_index])
+    );
+    writeLyrics(lyrics_lines);
+  } else {
+    writeLyrics([{ text: "No lyrics found!" }]);
+  }
+};
+
+const findLyrics = () => {
+  lyrics_index = -1;
+  for (let i = 0; i < lyrics_list.length; i++) {
+    let lyrics_name = lyrics_list[i].name.split(".")[0];
+    let song_name = songs_list[song_index].name.split(".")[0];
+    if (lyrics_name == song_name) {
+      lyrics_index = i;
+      break;
+    }
+  }
+};
+
+const readLyrics = (file) => {
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = function () {
+      resolve(reader.result);
+    };
+    reader.onerror = function () {
+      reject(reader.error);
+    };
+  });
+};
+
+const writeLyrics = (lines) => {
+  const lyricsElement = document.querySelector(".lyrics-text");
+  lyricsElement.innerText = "";
+  let index = 0;
+
+  lines.forEach((line) => {
+    const paragraph = document.createElement("p");
+    paragraph.id = "lyrics" + index;
+    index++;
+    paragraph.innerText = line.text;
+    lyricsElement.appendChild(paragraph);
+  });
+};
+
+const parseTime = (time) => {
+  const minsec = time.split(":");
+  const min = parseInt(minsec[0]) * 60;
+  const sec = parseFloat(minsec[1]);
+  return min + sec;
+};
+
+const lyricsTextToObject = (lyrics) => {
+  const regex = /^\[(?<time>\d{2}:\d{2}(\.\d{2})?)\](?<text>.*)/;
+  const lines = lyrics.split("\n");
+  const output = [];
+  lines.forEach((line) => {
+    const match = line.match(regex);
+
+    if (match == null) return;
+
+    const { time, text } = match.groups;
+    output.push({
+      time: parseTime(time),
+      text: text.trim(),
+    });
+  });
+  return output;
 };
 
 // Event listeners

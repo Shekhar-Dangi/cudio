@@ -31,6 +31,10 @@ body {
   font-variation-settings: "slnt" 0;
 }
 
+.col-green {
+  color: rgb(115, 189, 115);
+}
+
 /* Navbar */
 
 nav img {
@@ -171,6 +175,15 @@ input[type="range"]::-webkit-slider-thumb {
   margin-top: calc((var(--track-height) / 2) - 6px);
 }
 
+.duration {
+  position: absolute;
+  right: 35vw;
+}
+
+.current-duration {
+  position: absolute;
+  left: 35vw;
+}
 /* Songs list */
 
 .song-item {
