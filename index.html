@@ -12,19 +12,22 @@
         <img src="logo.jpeg" alt="" />
         <span class="ojuju-400">Cudio</span>
       </div>
-      <div>Home</div>
-      <div>About</div>
-      <div class="upload-section">
-        <input type="file" id="uploaded-songs" multiple />
-        <label for="uploaded-songs"
-          ><span>Songs</span><i class="fa-solid fa-file-arrow-up"></i
-        ></label>
-        <input type="file" id="uploaded-lyrics" multiple />
-        <label for="uploaded-lyrics"
-          ><span>Lyrics</span><i class="fa-solid fa-file-arrow-up"></i
-        ></label>
-        <button onclick="addSongs()" class="btn">Add Songs</button>
+      <div class="links">
+        <div>Home</div>
+        <div>About</div>
+        <div class="upload-section">
+          <input type="file" id="uploaded-songs" multiple />
+          <label for="uploaded-songs"
+            ><span>Songs</span><i class="fa-solid fa-file-arrow-up"></i
+          ></label>
+          <input type="file" id="uploaded-lyrics" multiple />
+          <label for="uploaded-lyrics"
+            ><span>Lyrics</span><i class="fa-solid fa-file-arrow-up"></i
+          ></label>
+          <button onclick="addSongs()" class="btn">Add Songs</button>
+        </div>
       </div>
+      <i id="bar" class="fa-solid fa-bars"></i>
     </nav>
     <div class="container">
       <div class="available-songs">
@@ -63,7 +66,7 @@
           class="fa-solid fa-2x fa-forward-step"
         ></i>
       </div>
-      <span class="current-duration">:-:</span>
+      <span class="current-duration">-:-</span>
       <span class="duration">-:-</span>
       <div class="song-info">
         <span id="songname"></span>

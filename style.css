@@ -35,13 +35,27 @@ body {
   color: rgb(115, 189, 115);
 }
 
+.display-flex {
+  display: flex;
+}
+
+.display-none {
+  display: none;
+}
+
 /* Navbar */
+
+header {
+  position: relative;
+}
 
 nav img {
   width: 29px;
 }
 nav {
+  position: fixed;
   display: flex;
+  width: 100%;
   background: black;
   height: 70px;
   align-items: center;
@@ -50,7 +64,15 @@ nav {
   padding-left: 0.5em;
 }
 
-nav div {
+.links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 0.5em;
+  flex-grow: 1;
+}
+
+.links div {
   margin: 0 1em;
   cursor: pointer;
 }
@@ -78,7 +100,7 @@ label span {
   cursor: pointer;
 }
 
-.upload-section {
+.links .upload-section {
   margin-left: auto;
 }
 
@@ -93,11 +115,16 @@ label span {
   border-radius: 0.4em;
 }
 
+#bar {
+  display: none;
+}
+
 /* Main container */
 
 .container {
   display: flex;
   width: 80vw;
+  margin-top: 100px;
 }
 
 .song-player {
@@ -123,7 +150,7 @@ label span {
   color: white;
   display: flex;
   justify-content: space-around;
-  margin: 1.7em auto;
+  margin: 100px auto;
   width: 70%;
   border-radius: 0.9em;
   padding: 1.5em;
@@ -141,6 +168,10 @@ label span {
 .lyrics {
   width: 59%;
   padding-left: 4em;
+}
+
+.lyrics-text p {
+  margin: 0.3em 0;
 }
 
 .controls i {
@@ -212,4 +243,104 @@ input[type="range"]::-webkit-slider-thumb {
 
 .song-item-container {
   margin-top: 3.5em;
+}
+
+/* Media Queries */
+@media screen and (max-width: 1058px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .lyrics {
+    padding-left: 0;
+  }
+
+  .available-songs {
+    width: 95%;
+  }
+
+  .lyrics {
+    width: 95%;
+  }
+
+  .lyrics-text p {
+    margin: 10;
+  }
+}
+
+@media screen and (min-width: 729px) {
+  .links {
+    display: flex;
+  }
+}
+@media screen and (max-width: 728px) {
+  #bar {
+    display: block;
+    margin-left: auto;
+    margin-right: 1em;
+    cursor: pointer;
+  }
+
+  .links {
+    position: fixed;
+    top: 70px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    display: none;
+    flex-direction: column;
+    gap: 1.5em;
+    padding: 1em;
+  }
+
+  .links .upload-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    margin: 0;
+  }
+
+  .container {
+    flex-direction: column;
+  }
+
+  .lyrics {
+    padding-left: 0;
+  }
+
+  .available-songs {
+    width: 95%;
+  }
+
+  .lyrics {
+    width: 95%;
+  }
+
+  .lyrics-text p {
+    margin: 10;
+  }
+
+  .container {
+    width: 100%;
+    border-radius: 0;
+    margin-top: 70px;
+    color: white;
+  }
+
+  body {
+    background-color: black;
+  }
+
+  input[type="range"] {
+    width: 80vw;
+  }
+
+  .current-duration {
+    left: 10vw;
+  }
+
+  .duration {
+    right: 10vw;
+  }
 }
