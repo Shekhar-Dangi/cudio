@@ -2,6 +2,8 @@ console.log("Welcome to Cudio!");
 
 // DOM Elements
 const control_song = document.getElementById("controlsong");
+const bar = document.getElementById("bar");
+const nav_links = document.querySelector(".links");
 const prev_song = document.getElementById("prevsong");
 const next_song = document.getElementById("nextsong");
 const progress_bar = document.getElementById("progressbar");
@@ -269,4 +271,12 @@ progress_bar.addEventListener("mouseup", () => {
 progress_bar.addEventListener("change", () => {
   audio_element.currentTime =
     (progress_bar.value / 100) * audio_element.duration;
+});
+
+bar.addEventListener("click", () => {
+  if (nav_links.style.display == "none") {
+    nav_links.style.display = "flex";
+  } else {
+    nav_links.style.display = "none";
+  }
 });
